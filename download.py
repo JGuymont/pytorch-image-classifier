@@ -1,12 +1,12 @@
-#!/usr/bin/env python2
+#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
 Created on Mon Jan 15 13:31:59 2018
 @author: chinwei
 """
 
-import urllib
-import cPickle as pickle
+import urllib.request
+import pickle
 import gzip
 import os
 import numpy as np
@@ -35,7 +35,5 @@ if __name__ == '__main__':
         path = 'http://deeplearning.net/data/mnist'
         mnist_filename_all = 'mnist.pkl'
         local_filename = os.path.join(args.savedir, mnist_filename_all)
-        urllib.urlretrieve(
-            "{}/{}.gz".format(path,mnist_filename_all), local_filename+'.gz')
-        tr, va, te = pickle.load(gzip.open(local_filename+'.gz','r'))
-        np.save(open(local_filename+'.npy','w'), (tr, va, te))
+        url = "{}/{}.gz".format(path, mnist_filename_all)
+        urllib.request.urlretrieve(url, '{}.gz'.format(local_filename))
