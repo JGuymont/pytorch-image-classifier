@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 """Convnet Classifier"""
-import torch
-import torch.nn as nn
-import torch.nn.functional as F
 
 from collections import OrderedDict
 
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
 
 # Main classifier that subclasses nn.Module
 class Classifier(nn.Module):
     """Convnet Classifier"""
     def __init__(self):
-        
+
         self.input_size = 28
         self.num_classes = 10
         self.channel_sizes = [1, 10]
@@ -49,7 +49,6 @@ class Classifier(nn.Module):
             _cnn_architecture['conv{}'.format(i)] = nn.Conv2d(self.channel_sizes[i], self.channel_sizes[i+1], self.kernel_sizes[i])
             _cnn_architecture['relu{}'.format(i)] = nn.ReLU()
         return _cnn_architecture
-
 
     def compute_dense_input_size(self, stride=1, dilation=1):
         #: return the size of the collapsed cnn output tensor 

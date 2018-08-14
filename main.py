@@ -46,8 +46,8 @@ def train(args, model, trainloader, devloader, optimizer, criterion):
             _outputs = model.forward(_inputs)
 
             loss = criterion(_outputs, _targets)
-            loss.backward()
-            optimizer.step()
+            loss.backward() #
+            optimizer.step() 
             losses.append(loss.item())
         
         _train_acc = model.evaluate(trainloader)

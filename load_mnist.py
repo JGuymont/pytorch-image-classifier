@@ -1,89 +1,68 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
-Created on Mon Jan 15 13:31:59 2018
-@author: Jonathan Guymont
+Created on Mon Jan 18 2018
+
+@author: J. Guymont
 """
-import pickle
-import gzip
-import matplotlib.pyplot as plt
-import random
 
-import torch
-from torch.autograd import Variable
+import os
+import numpy as np
+from tqdm import tqdm
 
-def normalize(x):
+from preprocessing import IMGPreprocessing
 
-    mean = x.mean()
-    std = x.std()
+class MNIST(IMGPreprocessing):
+    """load mnist dataset and and apply 
+    preprocessing from module IMGPreprocessing
 
-    normalized_x = (x - mean)/std
-
-    return normalized_x
-
-def load_mnist(train_size=1.):
-    """
-    load MNIST data and split into
-    predefined train/dev/test
+    Arguments:
+        mode
     """
 
-    with gzip.open('./data/mnist.pkl.gz', 'rb') as f:
+    def __init__(self, mode, img_path, flatten=False):
 
-        _train_set, _valid_set, _test_set = pickle.load(f, encoding='latin1')
+        self.img_path = img_path
 
-        _train_size = round(train_size*len(_train_set[0]))
-        _valid_size = round(train_size*len(_valid_set[0]))
-        _test_size = len(_test_set[0])
+        super(MNIST, self).__init__(mode=mode, flatten=False)
 
-        _train_x, _train_y = _train_set
-        valid_x, valid_y = _valid_set
-        test_x, test_y = _test_set
+    def mnist_digit(self, digit):
+        """load all image of the specified digit. 
+        This method suppose that all image of a same
+        digits are in a folder '/path_to_mnist_data/`digit`/' 
+        """
+        data = []
+        _img_dir = '{}/{}'.format(self.img_path, digit)
+        _img_list = os.listdir(_img_dir)
+        for img in _img_list:
+            img_path = '{}/{}'.format(_img_dir, img)
+            data.append(self.transform(img_path))
+        return data
 
-    _train_ix = range(_train_size)
-    _valid_ix = range(_valid_size)
-    _test_ix = range(_test_size)
+    def preprocess(self):
+        """apply preprocessing to inputs 
+        and store all data in a list.
+        
+        create a list of corresponding targets
+        """
+        _inputs = []
+        _targets = []
+        for i in tqdm(range(10)):
+            _cur_digits = self.mnist_digit(i)
+            _num_digit_example = len(_cur_digits)
+            _inputs.extend(_cur_digits)
+            _targets.extend([i]*_num_digit_example)
+        return _inputs, _targets
 
-    return [normalize(_train_x)[_train_ix, :], _train_y[_train_ix], 
-            normalize(valid_x)[_valid_ix, :], valid_y[_valid_ix], 
-            normalize(test_x)[_test_ix, :], test_y[_test_ix]]
-
-def batch_sampler(x, y, batch_size=1):
-    """
-    Data loader. Combines a dataset and a sampler, and
-    provides an iterators over the training dataset.
-
-    Args:
-        batch_size (int, optional): how many samples per batch to load (default: 1).
-    """
-
-    _data_size = len(y)
-    _feature_size = x.shape[1]
-
-    _examples = range(_data_size)
-
-    dataloader = []
-
-    for _ in range(int(_data_size/batch_size)):
-
-        #: randomly select examples for current SGD iteration
-        _mini_batch = random.sample(_examples, batch_size)
-
-        #: remove current example from the list of examples
-        _examples = [example for example in _examples if example not in _mini_batch]
-
-        #: Convert torch tensor to Variable
-        _batch_x = Variable(torch.Tensor(x[_mini_batch, :])).view(batch_size, 1, 28, 28)
-        _batch_y = Variable(torch.LongTensor(y[_mini_batch]))
-
-        dataloader.append((_batch_x, _batch_y))
-
-    return dataloader
-
+    def save(self, data, dest_path):
+        """save data"""
+        np.save(dest_path, data)
+        return None
 
 if __name__ == '__main__':
-    train_x, train_y, valid_x, valid_y, test_x, test_y = load_mnist()
-    
-    TRAINLOADER = batch_sampler(train_x, train_y, batch_size=64)
 
-    # plt.imshow(train_x[0].reshape((28, 28)))
-    # plt.show()
+    MNIST_DATA_PATH = './data/jpg/trainingSet'
+
+    mnist = MNIST(mode='L', img_path=MNIST_DATA_PATH)
+    inputs, targets = mnist.preprocess()
+    mnist.save(inputs, './data/inputs')
+    mnist.save(targets, './data/targets')
