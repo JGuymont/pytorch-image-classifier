@@ -11,8 +11,8 @@ if __name__ == "__main__":
     MNIST_TRAIN_FILE_ID = '1z8vHjGLPIaFU4VY-QfYa8pajIrWSZj87'
     MNIST_TEST_FILE_ID = '1u7RDFVb-B2R5zy-rdVuJHRZAI2ZuzesN'
 
-    TRAIN_DEST_PATH = './examples/fashion-mnist/data/csv/train.csv'
-    TEST_DEST_PATH = './examples/fashion-mnist/data/csv/test.csv'
+    TRAIN_DEST_PATH = './data/csv/train.csv'
+    TEST_DEST_PATH = './data/csv/test.csv'
 
     GoogleDriveDownloader.download_file_from_google_drive(
         file_id=MNIST_TRAIN_FILE_ID, 

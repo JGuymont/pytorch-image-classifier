@@ -7,7 +7,7 @@ from image_classifier.dataloader import Dataloader
 
 if __name__ == '__main__':
 
-    NORMALIZED_DATA_PATH = './examples/fashion-mnist/data/normalized_data.pkl'
+    NORMALIZED_DATA_PATH = './data/normalized_data.pkl'
 
     with open(NORMALIZED_DATA_PATH, 'rb') as f:
         data = pickle.load(f)
@@ -22,5 +22,5 @@ if __name__ == '__main__':
         "testloader": testloader,
     }
 
-    with open('./examples/fashion-mnist/data/dataloaders.pkl', 'wb') as f:
+    with open('./data/dataloaders.pkl', 'wb') as f:
         pickle.dump(dataloaders, f, pickle.HIGHEST_PROTOCOL)

@@ -1,6 +1,6 @@
 import subprocess
 
-MAIN_FILE = './examples/fashion-mnist/main.py'
+MAIN_FILE = './main.py'
 INPUT_SIZE = "28"
 INPUT_CHANNEL = "1" # greyscale
 NUM_CLASSES = "10"
@@ -23,7 +23,7 @@ COMMAND = [
     '--num_dense_layer', "2",
     '--hidden_layer_sizes', "256",        
     '--dense_dropout', "0.5",
-    '--epochs', "10",                                            
+    '--epochs', "100",                                            
     '--lr', "0.01",
     '--momentum', "0.5",
 ]

@@ -80,7 +80,7 @@ def argparser():
 
 if __name__ == '__main__':
 
-    with open('./examples/fashion-mnist/data/dataloaders.pkl', 'rb') as f:
+    with open('./data/dataloaders.pkl', 'rb') as f:
         dataloaders = pickle.load(f)
 
     trainloader = dataloaders['trainloader']
@@ -93,5 +93,5 @@ if __name__ == '__main__':
     print(clf)
 
     clf.train(trainloader, devloader)     
-    clf.save_model(clf, './examples/fashion-mnist/models', args.model_name)
+    clf.save_model(clf, './models', args.model_name)
     

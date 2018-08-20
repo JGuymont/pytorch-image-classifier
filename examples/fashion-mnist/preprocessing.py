@@ -83,7 +83,7 @@ def load_fashion_mnist_train(train_path, split=[0.8, 0.2], do_normalize=True):
 if __name__ == '__main__':
 
     TRAIN_FILE = './examples/fashion-mnist/data/csv/train.csv'
-    TEST_FILE = './examples/fashion-mnist/data/csv/test.csv'
+    TEST_FILE = './data/csv/test.csv'
 
     train_x, train_y, valid_x, valid_y = load_fashion_mnist_train(TRAIN_FILE, split=[0.8, 0.2], do_normalize=True)
     test_x, test_y = load_fashion_mnist_test(TEST_FILE, do_normalize=True)
@@ -97,5 +97,5 @@ if __name__ == '__main__':
         "test_y":  test_y
     }
 
-    with open('./examples/fashion-mnist/data/normalized_data.pkl', 'wb') as f:
+    with open('./data/normalized_data.pkl', 'wb') as f:
         pickle.dump(data, f, pickle.HIGHEST_PROTOCOL)
